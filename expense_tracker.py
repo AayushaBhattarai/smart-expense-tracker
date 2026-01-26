@@ -9,10 +9,17 @@ while True:
 
     choice = input("Enter your choice (1/2/3): ")
 
+    # ================= ADD EXPENSE =================
     if choice == "1":
         today = date.today()
         amount = input("Enter amount: ")
         category = input("Enter category: ")
+
+        try:
+            amount = int(amount)
+        except ValueError:
+            print("Amount must be a number.")
+            continue
 
         with open("expenses.csv", "a", newline="") as file:
             writer = csv.writer(file)
@@ -20,21 +27,40 @@ while True:
 
         print("Expense saved successfully with date!")
 
+    # ================= VIEW EXPENSES =================
     elif choice == "2":
         print("\n--- Expenses ---")
+        total = 0
+        found = False
+
         try:
             with open("expenses.csv", "r") as file:
                 reader = csv.reader(file)
-                found = False
+
                 for row in reader:
-                    if len(row) == 3:
-                        print(f"Date: {row[0]} | Amount: {row[1]} | Category: {row[2]}")
-                        found = True
-                if not found:
-                    print("No expenses recorded yet.")
+                    if len(row) != 3:
+                        continue  # skip broken rows
+
+                    date_val, amount_val, category = row
+
+                    try:
+                        amount_val = int(amount_val)
+                    except ValueError:
+                        continue  # skip invalid amount rows
+
+                    print(f"Date: {date_val} | Amount: {amount_val} | Category: {category}")
+                    total += amount_val
+                    found = True
+
+            if found:
+                print(f"\nTotal Spent: {total}")
+            else:
+                print("No expenses recorded yet.")
+
         except FileNotFoundError:
             print("No expenses file found.")
 
+    # ================= EXIT =================
     elif choice == "3":
         print("Exiting program. Goodbye!")
         break
