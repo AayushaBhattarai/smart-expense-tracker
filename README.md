@@ -5,8 +5,10 @@ A beginner-friendly Python console application to track daily expenses.
 ## Features
 - Add expenses (amount and category)
 - View all saved expenses
+- Automatically calculates and displays the total amount spent
 - Expenses are stored in a CSV file
 - Simple menu-driven interface
+
 
 ## Technologies Used
 - Python
